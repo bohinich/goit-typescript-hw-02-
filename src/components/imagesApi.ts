@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ImageApiResponse } from '../types';
+import type { ImageApiResponse } from '../types';
 
 const API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
 const BASE_URL = 'https://api.unsplash.com/search/photos';

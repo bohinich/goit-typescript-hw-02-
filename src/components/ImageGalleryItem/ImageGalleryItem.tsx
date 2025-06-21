@@ -1,15 +1,17 @@
-import css from './ImageGalleryItem.module.css';
+import React from 'react';
 
-interface Props {
+interface ImageGalleryItemProps {
   url: string;
   alt: string;
   onClick: () => void;
 }
 
-export const ImageGalleryItem = ({ url, alt, onClick }: Props) => {
+const ImageGalleryItem: React.FC<ImageGalleryItemProps> = ({ url, alt, onClick }) => {
   return (
-    <li className={css.item} onClick={onClick}>
-      <img src={url} alt={alt} className={css.image} />
+    <li className="item" onClick={onClick}>
+      <img src={url} alt={alt} className="image" />
     </li>
   );
 };
+
+export default ImageGalleryItem;

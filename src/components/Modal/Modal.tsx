@@ -1,29 +1,28 @@
+import React from 'react';
 import ReactModal from 'react-modal';
+import type { Image } from '../../types';
 
 interface ModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  imageUrl: string;
+  image: Image;
+  onClose: () => void;
 }
 
-export const Modal = ({ isOpen, onRequestClose, imageUrl }: ModalProps) => {
+const Modal: React.FC<ModalProps> = ({ image, onClose }) => {
   return (
     <ReactModal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      isOpen={true}
+      onRequestClose={onClose}
       contentLabel="Image Modal"
-      style={{
-        overlay: { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-        content: {
-          maxWidth: '800px',
-          margin: 'auto',
-          background: 'transparent',
-          border: 'none',
-          padding: 0,
-        },
-      }}
+      className="modal"
+      overlayClassName="overlay"
+      ariaHideApp={false}
     >
-      <img src={imageUrl} alt="Modal" style={{ width: '100%' }} />
+      <button onClick={onClose} className="close-button">
+        Close
+      </button>
+      <img src={image.urls.regular} alt={image.alt_description || 'Image'} />
     </ReactModal>
   );
 };
+
+export default Modal;

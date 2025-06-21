@@ -1,34 +1,39 @@
-import { FormEvent, useState } from 'react';
-import css from './Searchbar.module.css';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 interface SearchbarProps {
   onSubmit: (query: string) => void;
 }
 
-export const Searchbar = ({ onSubmit }: SearchbarProps) => {
-  const [searchQuery, setSearchQuery] = useState('');
+const Searchbar: React.FC<SearchbarProps> = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      onSubmit(searchQuery.trim());
-      setSearchQuery('');
-    }
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
+    onSubmit(trimmedQuery);
+    setQuery('');
   };
 
   return (
-    <header className={css.searchbar}>
-      <form onSubmit={handleSubmit} className={css.form}>
+    <header className="searchbar">
+      <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Search images..."
+          value={query}
+          onChange={handleChange}
         />
         <button type="submit">Search</button>
       </form>
     </header>
   );
 };
+
+export default Searchbar;

@@ -1,23 +1,25 @@
-import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-import { Image } from '../../types';
-import css from './ImageGallery.module.css';
+import React from 'react';
+import type { Image } from '../../types';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
-interface Props {
+interface ImageGalleryProps {
   images: Image[];
-  onImageClick: (url: string) => void;
+  onImageClick: (image: Image) => void;
 }
 
-export const ImageGallery = ({ images, onImageClick }: Props) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, onImageClick }) => {
   return (
-    <ul className={css.gallery}>
-      {images.map((image) => (
+    <ul className="gallery">
+      {images.map(image => (
         <ImageGalleryItem
           key={image.id}
           url={image.urls.small}
           alt={image.alt_description || 'Image'}
-          onClick={() => onImageClick(image.urls.regular)}
+          onClick={() => onImageClick(image)}
         />
       ))}
     </ul>
   );
 };
+
+export default ImageGallery;
