@@ -1,65 +1,67 @@
-import { useState, useEffect } from 'react';
-import type { Image } from './types';
-import { fetchImages } from './api/imagesApi';
-import { Searchbar } from './components/Searchbar/Searchbar';
-import  ImageGallery  from './components/ImageGallery/ImageGallery';
-import  Loader  from './components/Loader/Loader';
-import  Modal  from './components/Modal/Modal';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Searchbar from "./components/Searchbar";
+import ImageGallery from "./components/ImageGallery";
+import Loader from "./components/Loader";
+import ButtonLoadMore from "./components/ButtonLoadMore";
+import { Image } from "./types";
+import { fetchImages } from "./services/api";
 
-export const App = () => {
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
   const [images, setImages] = useState<Image[]>([]);
-  const [query, setQuery] = useState<string>('');
   const [page, setPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [totalHits, setTotalHits] = useState<number>(0);
+
+  const handleSearchSubmit = (searchQuery: string) => {
+    if (searchQuery === query) return; // не робити новий запит якщо запит не змінився
+    setQuery(searchQuery);
+    setImages([]);
+    setPage(1);
+    setTotalHits(0);
+    setError(null);
+  };
 
   useEffect(() => {
     if (!query) return;
 
-    const fetchData = async () => {
+    const loadImages = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        setIsLoading(true);
         const data = await fetchImages(query, page);
-        setImages(prev => (page === 1 ? data.results : [...prev, ...data.results]));
-      } catch (err) {
-        setError('Something went wrong. Try again.');
+        if (data.hits.length === 0) {
+          setError("За вашим запитом зображень не знайдено");
+          return;
+        }
+        setImages((prev) => [...prev, ...data.hits]);
+        setTotalHits(data.totalHits);
+      } catch (error) {
+        setError("Помилка при завантаженні зображень");
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchData();
+    loadImages();
   }, [query, page]);
 
-  const handleSearch = (newQuery: string) => {
-    if (newQuery !== query) {
-      setQuery(newQuery);
-      setPage(1);
-      setImages([]);
-    }
-  };
-
   const handleLoadMore = () => {
-    setPage(prev => prev + 1);
+    setPage((prev) => prev + 1);
   };
 
-  const openModal = (url: string) => setSelectedImage(url);
-  const closeModal = () => setSelectedImage(null);
+  const canLoadMore = images.length < totalHits;
 
   return (
-    <div className="App">
-      <Searchbar onSearch={handleSearch} />
-      {error && <p className="Error">{error}</p>}
-      <ImageGallery images={images} onImageClick={openModal} />
-      {isLoading && <Loader />}
-      {images.length > 0 && !isLoading && (
-        <button className="LoadMore" onClick={handleLoadMore}>
-          Load more
-        </button>
-      )}
-      {selectedImage && <Modal imageUrl={selectedImage} onClose={closeModal} />}
+    <div>
+      <Searchbar onSubmit={handleSearchSubmit} />
+      {error && <p>{error}</p>}
+      <ImageGallery images={images} />
+      {loading && <Loader />}
+      {canLoadMore && !loading && <ButtonLoadMore onClick={handleLoadMore} />}
     </div>
   );
 };
+
+export default App;
