@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, FormEvent } from "react";
+import React, { FC, useState, FormEvent } from "react";
 
 interface SearchbarProps {
   onSubmit: (query: string) => void;
@@ -7,24 +7,22 @@ interface SearchbarProps {
 const Searchbar: FC<SearchbarProps> = ({ onSubmit }) => {
   const [inputValue, setInputValue] = useState<string>("");
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputValue.trim() === "") return;
-    onSubmit(inputValue.trim());
+    const trimmed = inputValue.trim();
+    if (trimmed) {
+      onSubmit(trimmed);
+    }
   };
 
   return (
-    <header>
+    <header style={{ padding: "20px", backgroundColor: "#eee" }}>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={inputValue}
-          onChange={handleChange}
-          placeholder="Пошук зображень"
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Пошук зображень..."
         />
         <button type="submit">Пошук</button>
       </form>

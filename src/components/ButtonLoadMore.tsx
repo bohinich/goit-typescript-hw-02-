@@ -4,8 +4,10 @@ interface ButtonLoadMoreProps {
   onClick: () => void;
 }
 
-const ButtonLoadMore: FC<ButtonLoadMoreProps> = ({ onClick }) => {
-  return <button onClick={onClick}>Завантажити ще</button>;
-};
+const ButtonLoadMore: FC<ButtonLoadMoreProps> = ({ onClick }) => (
+  <div style={{ textAlign: "center", margin: "20px" }}>
+    <button onClick={onClick}>Завантажити ще</button>
+  </div>
+);
 
 export default ButtonLoadMore;

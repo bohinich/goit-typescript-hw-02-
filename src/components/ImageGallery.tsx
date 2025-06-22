@@ -8,7 +8,7 @@ interface ImageGalleryProps {
 
 const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
   return (
-    <ul>
+    <ul style={{ display: "flex", flexWrap: "wrap", gap: "10px", padding: 0 }}>
       {images.map((image) => (
         <ImageGalleryItem key={image.id} image={image} />
       ))}

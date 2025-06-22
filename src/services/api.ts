@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ImageData } from "../types";
 
-
 const API_KEY = "import.meta.env.VITE_UNSPLASH_KEY";
 const BASE_URL = "https://pixabay.com/api/";
 
@@ -9,7 +8,6 @@ interface FetchImagesResponse {
   hits: ImageData[];
   totalHits: number;
 }
-
 
 export const fetchImages = async (
   query: string,
@@ -22,6 +20,7 @@ export const fetchImages = async (
       q: query,
       image_type: "photo",
       orientation: "horizontal",
+      safesearch: true,
       page,
       per_page: perPage,
     },
