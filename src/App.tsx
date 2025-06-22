@@ -3,7 +3,7 @@ import Searchbar from "./components/Searchbar";
 import ImageGallery from "./components/ImageGallery";
 import Loader from "./components/Loader";
 import ButtonLoadMore from "./components/ButtonLoadMore";
-import { ImageData } from "./types";
+import { ImageData } from "./types/index";
 import { fetchImages } from "./services/api";
 
 const App: React.FC = () => {

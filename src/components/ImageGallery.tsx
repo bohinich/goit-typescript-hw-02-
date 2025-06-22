@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { ImageData } from "../types";
+import { ImageData } from "../types/index";
 import ImageGalleryItem from "./ImageGalleryItem";
 
 interface ImageGalleryProps {
