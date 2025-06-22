@@ -4,4 +4,3 @@ export interface ImageData {
   largeImageURL: string;
   tags: string;
 }
-
