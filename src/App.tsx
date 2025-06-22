@@ -1,74 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { Image } from './types';
-import Searchbar from './components/Searchbar/Searchbar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import { fetchImages } from './components/imagesApi';
-import Modal from './components/Modal/Modal';
-import Loader from './components/Loader/Loader';
+import { fetchImages } from './api/imagesApi';
+import { Searchbar } from './components/Searchbar/Searchbar';
+import { ImageGallery } from './components/ImageGallery/ImageGallery';
+import { Loader } from './components/Loader/Loader';
+import { Modal } from './components/Modal/Modal';
+import './App.css';
 
-const App: React.FC = () => {
-  const [query, setQuery] = useState('');
+export const App = () => {
   const [images, setImages] = useState<Image[]>([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [modalImage, setModalImage] = useState<Image | null>(null);
+  const [query, setQuery] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!query) return;
 
-    const loadImages = async () => {
-      setIsLoading(true);
-      setError(null);
-
+    const fetchData = async () => {
       try {
+        setIsLoading(true);
         const data = await fetchImages(query, page);
-        if (page === 1) {
-          setImages(data.results);
-        } else {
-          setImages(prev => [...prev, ...data.results]);
-        }
-      } catch (error) {
-        setError('Error fetching images');
+        setImages(prev => (page === 1 ? data.results : [...prev, ...data.results]));
+      } catch (err) {
+        setError('Something went wrong. Try again.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadImages();
+    fetchData();
   }, [query, page]);
 
-  const handleSearchSubmit = (searchQuery: string) => {
-    if (searchQuery === query) return;
-    setQuery(searchQuery);
-    setPage(1);
-    setImages([]);
+  const handleSearch = (newQuery: string) => {
+    if (newQuery !== query) {
+      setQuery(newQuery);
+      setPage(1);
+      setImages([]);
+    }
   };
 
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
   };
 
-  const openModal = (image: Image) => {
-    setModalImage(image);
-  };
-
-  const closeModal = () => {
-    setModalImage(null);
-  };
+  const openModal = (url: string) => setSelectedImage(url);
+  const closeModal = () => setSelectedImage(null);
 
   return (
-    <>
-      <Searchbar onSubmit={handleSearchSubmit} />
-      {error && <p>{error}</p>}
+    <div className="App">
+      <Searchbar onSearch={handleSearch} />
+      {error && <p className="Error">{error}</p>}
       <ImageGallery images={images} onImageClick={openModal} />
       {isLoading && <Loader />}
       {images.length > 0 && !isLoading && (
-        <button onClick={handleLoadMore}>Load More</button>
+        <button className="LoadMore" onClick={handleLoadMore}>
+          Load more
+        </button>
       )}
-      {modalImage && <Modal image={modalImage} onClose={closeModal} />}
-    </>
+      {selectedImage && <Modal imageUrl={selectedImage} onClose={closeModal} />}
+    </div>
   );
 };
-
-export default App;
