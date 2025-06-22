@@ -3,12 +3,12 @@ import Searchbar from "./components/Searchbar";
 import ImageGallery from "./components/ImageGallery";
 import Loader from "./components/Loader";
 import ButtonLoadMore from "./components/ButtonLoadMore";
-import { Image } from "./types";
+import { ImageData } from "./types";
 import { fetchImages } from "./services/api";
 
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>("");
-  const [images, setImages] = useState<Image[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

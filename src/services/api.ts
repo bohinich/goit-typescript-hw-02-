@@ -1,13 +1,15 @@
 import axios from "axios";
-import { Image } from "../types";
+import { ImageData } from "../types";
+
 
 const API_KEY = "import.meta.env.VITE_UNSPLASH_KEY";
 const BASE_URL = "https://pixabay.com/api/";
 
 interface FetchImagesResponse {
-  hits: Image[];
+  hits: ImageData[];
   totalHits: number;
 }
+
 
 export const fetchImages = async (
   query: string,

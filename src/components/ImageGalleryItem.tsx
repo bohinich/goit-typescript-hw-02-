@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { Image } from "../types";
+import { ImageData } from "../types";
 
 interface ImageGalleryItemProps {
-  image: Image;
+  image: ImageData;
 }
 
 const ImageGalleryItem: FC<ImageGalleryItemProps> = ({ image }) => {

@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { Image } from "../types";
+import { ImageData } from "../types";
 import ImageGalleryItem from "./ImageGalleryItem";
 
 interface ImageGalleryProps {
-  images: Image[];
+  images: ImageData[];
 }
 
 const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
