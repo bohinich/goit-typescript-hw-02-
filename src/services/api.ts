@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ImageData } from "../types";
+import { ImageData } from "../types/index";
 
 const API_KEY = "import.meta.env.VITE_UNSPLASH_KEY";
 const BASE_URL = "https://pixabay.com/api/";
