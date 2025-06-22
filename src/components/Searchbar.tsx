@@ -5,13 +5,14 @@ interface SearchbarProps {
 }
 
 const Searchbar: FC<SearchbarProps> = ({ onSubmit }) => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = inputValue.trim();
     if (trimmed) {
       onSubmit(trimmed);
+      setInputValue("");
     }
   };
 
@@ -23,6 +24,7 @@ const Searchbar: FC<SearchbarProps> = ({ onSubmit }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Пошук зображень..."
+          autoFocus
         />
         <button type="submit">Пошук</button>
       </form>

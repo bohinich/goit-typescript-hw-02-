@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const [totalHits, setTotalHits] = useState<number>(0);
 
   const handleSearchSubmit = (searchQuery: string) => {
-    if (searchQuery === query) return; // не робити новий запит якщо запит не змінився
+    if (searchQuery === query) return;
     setQuery(searchQuery);
     setImages([]);
     setPage(1);
@@ -37,7 +37,7 @@ const App: React.FC = () => {
         }
         setImages((prev) => [...prev, ...data.hits]);
         setTotalHits(data.totalHits);
-      } catch (error) {
+      } catch {
         setError("Помилка при завантаженні зображень");
       } finally {
         setLoading(false);
